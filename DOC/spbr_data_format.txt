@@ -1,0 +1,75 @@
+<<Data format (ASCII)>>
+#/SPBR_ASCII_Data
+#/NumParticles num  (optional)
+... The #/NumParticles command is optional in ASCII data
+... Other commands (see below)
+#/EndHeader
+x y z nx ny nz [R_byte G_byte B_byte]
+x y z nx ny nz [R_byte G_byte B_byte]
+...
+
+
+<<Data format (Binary)>>
+#/SPBR_Binary_Data
+#/NumParticles 100000 num
+... The #/NumParticles command must be described in binary  data
+... Other commands (see below)
+#/EndHeader
+x y z nx ny nz R_byte G_byte B_byte
+x y z nx ny nz R_byte G_byte B_byte
+...
+
+
+<<Commands>>
+
+  #/BaseVector e1.x e1.y e1.z e2.x e2.y e2.z
+     * Rotation (Set body-coord base vectors in world coord.)
+  #/BGColorRGBByte (uByte r) (uByte g) (uByte b)
+  #/BoundingBox xmin ymin zmin  xmax ymax zmax 
+  #/CameraFar 1 or 0  (default: 0)
+     * On/off of very-far camera setting
+  #/CameraPosition (float x) (float y) (float z)  (default: (0,0,12))
+  #/CameraZoom (zoom_factor f)  (default: 1.0)
+  #/ColorRGB (double r) (double g) (double b)
+  #/ColorRGBByte (uByte r) (uByte g) (uByte b)
+  #/EndHeader
+     * End of the header reagion
+  #/ForcedShuffle  1 or 0 (default is 0)
+     * Additional shuffle after reading data
+  #/FPS 1 or 0  (default: 0)
+     * On/off of displaying FPS on screen
+  #/ImageResolution (uInt size) (default: 512)
+  #/LambertShading [kd ka] (default: 0.6 0.4)
+  #/LOD 1 or 0 (on/off of LOD (default: 1))
+  #/LookAt (float x) (float y) (float z)  (default: (0,0,0))
+  #/NumParticles  num
+     * This command makes sense if #/EndHeader command is used together
+  #/ObjectZXRotation zrot_angle_deg xrot_angle_deg 
+  #/Origin x y z 
+     * Translation (x, y, z)
+  #/OrthogonalCamera 
+     * Use orthogonal projection for camera
+  #/ParticleZoom 1 or 0  (default: 1)
+     * On/off of particle zoom
+  #/PerspectiveCamera 
+     * Use perspective projection for camera (default setting is ON))
+  #/PhongShading [kd ka ks shininess] (default: 0.5 0.3 0.8 100)
+  #/PointSize   (uInt size) 
+     * Available with -opaque option
+  #/RepeatLevel (uInt size) (default: 1)
+  #/ReverseNormals 1 or 0 (default: 0)
+  #/SPBR_ASCII_Data
+     * Beginning of the header reagion
+  #/Shading 1 or 0 (default: 1)
+     * On/off of shading
+     * The default shading type is Lambert.
+       Use #/LambertShading or #/PhongShading for detailed tuning.
+  #/Shuffle 1 or 0  (default: 1)
+     * On/off of particle shuffling by a renderer
+  #/ForcedDefaultCamera 1/0 (default 0)
+     * All camera setting is initialized.
+  #/ViewAngle (float angle_deg) (default: 45.0)
+  #/WireframeBox xmin ymin zmin xmax ymax zmax
+     * z=zmin: red, z=zmax: blue, z-parallel: green
+
+
