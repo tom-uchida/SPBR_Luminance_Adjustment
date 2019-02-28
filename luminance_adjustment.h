@@ -1,18 +1,18 @@
 //////////////////////////////////////
-//   @file   correct_pixel_value.h
+//   @file   luminance_adjustment.h
 //   @author Tomomasa Uchida
 //   @date   2019/02/11
 //////////////////////////////////////
 
-#if !defined  CORRECT_PIXEL_VALUE_H
-#define       CORRECT_PIXEL_VALUE_H
+#if !defined  LUMINANCE_ADJUSTMENT_H
+#define       LUMINANCE_ADJUSTMENT_H
 
 #include "spbr.h"
 
-class CorrectPixelValue {
+class LuminanceAdjustment {
 
 public:
-    CorrectPixelValue();
+    LuminanceAdjustment();
 
     int mainsub_spbr(
         kvs::glut::Application* app,
@@ -25,4 +25,4 @@ private:
     void runPython();
 };
 
-#endif // end of correct_pixel_value.h
+#endif // end of luminance_adjustment.h

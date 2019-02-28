@@ -5,8 +5,8 @@
 #if !defined  SPECIAL_COMMENT_HH
 #define       SPECIAL_COMMENT_HH
 
-// #/CorrectPixelValue 1 or 0 (default: 0)
-const char CORRECT_PIXEL_VALUE[] = "#/CorrectPixelValue"; // UCHIDA
+// #/LuminanceAdjustment 1 or 0 (default: 0)
+const char LUMINANCE_ADJUSTMENT[] = "#/LuminanceAdjustment"; // UCHIDA
 
 // #/Origin O.x O.y O.z
 const char ORIGIN_COMMAND           [] = "#/Origin";

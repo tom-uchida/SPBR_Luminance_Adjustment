@@ -7,14 +7,14 @@
 // UCHIDA
 //-----
 void
-SPBR::setFlagCorrectPixelValue(int flag) {
+SPBR::setFlagLuminanceAdjustment(int flag) {
   if ( flag ) { 
-    m_flagCorrectPixelValue = true;  
-    std::cout << "** Correct pixel value." << std::endl;
+    m_flagLuminanceAdjustment = true;  
+    std::cout << "** Adjust luminance." << std::endl;
 
   } else { 
-    m_flagCorrectPixelValue = false;  
-    std::cout << "** Do not correct pixel value." << std::endl;
+    m_flagLuminanceAdjustment = false;  
+    std::cout << "** Do not adjust luminance." << std::endl;
   }
 }
 

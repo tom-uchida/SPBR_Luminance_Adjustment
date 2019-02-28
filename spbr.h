@@ -40,10 +40,10 @@ class SPBR  : public kvs::PointObject {
   //---------- METHODS ----------//
 
   // UCHIDA
-  // Correct pixel value
-  void   setFlagCorrectPixelValue(int flag);
-  bool   m_flagCorrectPixelValue;
-  bool   isCorrectPixelValue ( void ) { return m_flagCorrectPixelValue;}
+  // Luminance Adjustment
+  void   setFlagLuminanceAdjustment(int flag);
+  bool   m_flagLuminanceAdjustment;
+  bool   isLuminanceAdjustment ( void ) { return m_flagLuminanceAdjustment;}
 
   // Camera control
   void   setCameraPosition ( double Ex , double Ey , double Ez  );

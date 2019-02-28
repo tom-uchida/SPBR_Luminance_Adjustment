@@ -31,7 +31,7 @@
 
 #include "mainfn_utility.h"
 
-#include "correct_pixel_value.h" // UCHIDA
+#include "luminance_adjustment.h" // UCHIDA
 
 
 //#define DEBUG_MAIN
@@ -68,10 +68,10 @@ int mainsub_spbr_spbrascii ( int argc, char** argv )
   }//for
 
   // UCHIDA
-  // Correct pixel value
-  if ( spbr_engine->isCorrectPixelValue() ) {
-    CorrectPixelValue* cpv = new CorrectPixelValue();
-    return cpv->mainsub_spbr( &app, argc, argv, spbr_engine, object );
+  // Adjust luminance
+  if ( spbr_engine->isLuminanceAdjustment() ) {
+    LuminanceAdjustment* la = new LuminanceAdjustment();
+    return la->mainsub_spbr( &app, argc, argv, spbr_engine, object );
   }
 
   // Set the total bounding box

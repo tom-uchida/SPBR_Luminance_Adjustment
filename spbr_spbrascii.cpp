@@ -29,7 +29,7 @@ const unsigned int DEFAULT_BG_GRAY_LEVEL    = 255 ;
 
 //-----
 SPBR::SPBR( const char* input_file, SPBR_ASCII_FORMAT file_format )  : 
-    m_flagCorrectPixelValue(false), // UCHIDA
+    m_flagLuminanceAdjustment(false), // UCHIDA
     m_cameraPosition (0.0, 0.0, DEFAULT_CAMERA_DISTANCE) ,
     m_lookAt         (0.0, 0.0, 0.0 )             ,
     m_viewAngle      ( DEFAULT_VIEW_ANGLE )       ,
@@ -145,11 +145,11 @@ SPBR::readHeader_and_countParticles ( void )
 	        std::cout << "** SPBR ASCII header is detected." << std::endl;
         } else
         // UCHIDA
-        //----- Correct Pixel Value ----- 
-        if ( !strncmp( buf, CORRECT_PIXEL_VALUE, strlen(CORRECT_PIXEL_VALUE) ) ) { 
+        //----- Luminance Adjustment ----- 
+        if ( !strncmp( buf, LUMINANCE_ADJUSTMENT, strlen(LUMINANCE_ADJUSTMENT) ) ) { 
           int flag;
           sscanf ( buf, "%s %d", dummy, &flag );
-          setFlagCorrectPixelValue( flag );
+          setFlagLuminanceAdjustment( flag );
         } else
         //----- ColorRGBByte (renamed from ColorByteRGB) -----
         // NOTE: The ColorRGBByte block must be written before the ColorRGB block

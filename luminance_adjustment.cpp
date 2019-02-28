@@ -1,5 +1,5 @@
 //////////////////////////////////////
-//   @file   correct_pixel_value.cpp
+//   @file   luminance_adjustment.cpp
 //   @author Tomomasa Uchida
 //   @date   2019/02/11
 //////////////////////////////////////
@@ -29,21 +29,21 @@
 
 #include "mainfn_utility.h"
 
-#include "correct_pixel_value.h"
+#include "luminance_adjustment.h"
 #include "create_two_input_images.h"
 #include <kvs/glut/Timer>
 #include "control_object_renderer.h"
 
-CorrectPixelValue::CorrectPixelValue()
+LuminanceAdjustment::LuminanceAdjustment()
 {
     //---- Message
-    std::cout << "\n\n========== Correct Pixel Value =========="    << std::endl;
-    std::cout << "         @author Tomomasa Uchida"                 << std::endl;
-    std::cout << "         @date   2019/02/16"                      << std::endl;
-    std::cout << "\n** CorrectPixelValue constructor is called."    << std::endl;
+    std::cout << "\n\n===== Luminance Adjustment ====="           << std::endl;
+    std::cout << "        Tomomasa Uchida"                    << std::endl;
+    std::cout << "           2019/02/28"                      << std::endl;
+    std::cout << "\n** LuminanceAdjustment constructor is called."<< std::endl;
 }
 
-int CorrectPixelValue::mainsub_spbr(
+int LuminanceAdjustment::mainsub_spbr(
     kvs::glut::Application* app,
     int                     argc,
     char**                  argv,
@@ -108,7 +108,7 @@ int CorrectPixelValue::mainsub_spbr(
     return ( app->run() );
 } // End mainsub()
 
-void CorrectPixelValue::runPython() {
+void LuminanceAdjustment::runPython() {
     // Set name of two input images
     char input_image[256];
     char input_image_LR1[256];

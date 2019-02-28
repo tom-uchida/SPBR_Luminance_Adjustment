@@ -14,7 +14,7 @@ const char OPBR_APP_TITLE    [] = "===== Opaque Point-based Renderer (OPBR) ====
 const char SOPBR_VERSION [] = "Version beta-13b";
 
 //----- DATE
-const char DATE          [] = "2019/03/XX (DEBUG : Correct Pixel Value)";
+const char DATE          [] = "2019/03/XX";
 
 //----- AUTHOR and INSTITUTE
 const char AUTHOR       [] = "      Satoshi Tanaka and Kyoko Hasegawa";
