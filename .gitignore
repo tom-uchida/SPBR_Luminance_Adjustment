@@ -2,5 +2,8 @@ CPV_UCHIDA/
 SPBR_DATA/
 
 *.o
+*.cc
+*.txt
 spbr
 opbr
+Makefile*
