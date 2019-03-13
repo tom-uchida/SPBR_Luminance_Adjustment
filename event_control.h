@@ -8,8 +8,8 @@
 #include <kvs/Version> //KVS2
 
 #if KVS_VERSION_MAJOR == 2
-  #include <kvs/Scene> //KVS2
-#include <kvs/ParticleBasedRenderer> //KVS2
+    #include <kvs/Scene> //KVS2
+    #include <kvs/ParticleBasedRenderer> //KVS2
 #endif
 
 #include <kvs/InitializeEventListener>
@@ -46,13 +46,12 @@ const kvs::Vector3f DEFAULT_LIGHT_POSITION (12.0, 12.0, 12.0) ;
 class TimerEvent : public kvs::TimerEventListener {
 //------------------------------------------------------------//
 private:
-	const int 			CAPTURE_NUM = 2;
+	const int 			num_of_snapshots = 2;
 	int     			m_argc;
   	char**  			m_argv;
 	size_t  			m_LR;
 	char        		m_filename_tmp[256];
 	std::string			m_filename;
-	kvs::glut::Timer* 	m_timer;
 	kvs::Scene* 		m_scene;
 	SPBR*				m_spbr_engine;
 	SingleInputFile* 	m_sif = SingleInputFile::GetInstance();
@@ -63,26 +62,22 @@ public:
     			kvs::glut::Timer*		timer,
     			kvs::Scene* 			scene,
     			SPBR* 					spbr_engine,
- 				const int 				original_LR ) : 
+                const int 				original_LR ) : 
     	m_argc( argc ),
     	m_argv( argv ),
     	m_LR( original_LR ),
-		m_timer( timer ),
 		m_scene( scene ),
 		m_spbr_engine( spbr_engine )
 	{
+        // Set filename for snapshots
 		m_sif->GetNameBody( m_filename_tmp );
 		m_filename = m_filename_tmp;
 	}
 
 	void update( kvs::TimeEvent* event ) {
-		// Stop timer
-		// if ( m_timer->isStopped() ) m_timer->start();
-	 	// else m_timer->stop(); std::cout << "stop." << std::endl;
-
 	    static size_t capture_counter = 1;
 
-        if ( capture_counter <= CAPTURE_NUM ) {
+        if ( capture_counter <= num_of_snapshots ) {
         	std::string filename = m_filename + "_LR" +kvs::String::ToString(m_LR) + ".bmp";
             CaptureImage( m_scene, filename );
             std::cerr << "** Snapshot repeat level \"" << m_LR << "\" image (BMP)" << std::endl;
@@ -94,15 +89,18 @@ public:
             	std::cout << "** Replaced object and renderer." << std::endl;
 
             } else if ( capture_counter == 2 ) {
-            	//exit(0);
-            	std::cout << "\nSucceeded." << std::endl;
-            	std::cout << "=========================================" << std::endl;
+            	std::cout << "\nSnapshot succeeded." << std::endl;
+            	std::cout << "================================" << std::endl;
+
+                // 輝度値補正
+
+                //exit(0);
             }
 
             capture_counter++;
         } // end if
 
-  	} // end update()
+    } // end update()
 };
 
 //------------------------------------------------------------//

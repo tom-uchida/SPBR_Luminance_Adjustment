@@ -10,19 +10,20 @@
 #include "spbr.h"
 
 class LuminanceAdjustment {
+private:
+    void adjustLuminance(std::string img_name, std::string img_name_LR1);
 
 public:
     LuminanceAdjustment();
 
-    int mainsub_spbr(
+    static int mainsub_spbr(
         kvs::glut::Application* app,
         int                     argc,
         char**                  argv,
         SPBR*                   spbr_engine,
         kvs::PointObject*       object );
 
-private:
-    void runPython();
+    
 };
 
 #endif // end of luminance_adjustment.h

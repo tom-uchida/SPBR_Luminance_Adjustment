@@ -1,0 +1,23 @@
+|| spbr-ascii |spbr-binary | ply-ascii | ply-binary |
+|:---|:---:|:---:|:---:|:---:|
+|addBoundingBoxToScene|○|○|○|○|
+|isForcedShuffleOn()|○|○|○|○|
+|kvs::glsl::ParticleBasedRenderer*|○|○|○|○|
+|setRepetitionLevel()|○|○|○|○|
+|setShadingType()|○|○|○|○|
+|isShading()|○|○|○|○|
+|isLOD()|○|○|○|○|
+|isParticleZoomOn()|○|○|○|○|
+|isParticleShuffleOn()|○|○|○|○|
+|kvs::glut::Screen|○|○|○|○|
+|registerObject()|○|○|○|○|
+|isZXRotation()|○|○|○|○|
+|drawWireframeBox()|○|○|○|○|
+|setCameraParameters()|○|○|○|○|
+|setGeometry()|○|○|○|○|
+|displayParticleSize()|○|○|○|○|
+|setBackgroundColor()|○|○|○|○|
+|setWindowTitle()|○|○|○|○|
+|drawFPS()|○|○|○|○|
+|displayMenu()|○|○|○|○|
+|show()|○|○|○|○|

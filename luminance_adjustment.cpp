@@ -37,10 +37,10 @@
 LuminanceAdjustment::LuminanceAdjustment()
 {
     //---- Message
-    std::cout << "\n\n===== Luminance Adjustment ====="           << std::endl;
-    std::cout << "        Tomomasa Uchida"                    << std::endl;
-    std::cout << "           2019/02/28"                      << std::endl;
-    std::cout << "\n** LuminanceAdjustment constructor is called."<< std::endl;
+    std::cout << "\n\n===== Luminance Adjustment ====="             << std::endl;
+    std::cout << "        Tomomasa Uchida"                          << std::endl;
+    std::cout << "           2019/02/28"                            << std::endl;
+    std::cout << "\n** LuminanceAdjustment constructor is called."  << std::endl;
 }
 
 int LuminanceAdjustment::mainsub_spbr(
@@ -78,7 +78,7 @@ int LuminanceAdjustment::mainsub_spbr(
     unsigned int img_resoln = spbr_engine->imageResolution();
     screen.setGeometry( 0, 0, img_resoln, img_resoln );
 
-    // Forcibly set background color
+    // Forcibly, set background color
     screen.setBackgroundColor( kvs::RGBColor(0, 0, 0) );
     std::cout << "** Forcibly, background color is set to \"black\"." << std::endl;
 
@@ -106,22 +106,4 @@ int LuminanceAdjustment::mainsub_spbr(
     screen.show();
 
     return ( app->run() );
-} // End mainsub()
-
-void LuminanceAdjustment::runPython() {
-    // Set name of two input images
-    char input_image[256];
-    char input_image_LR1[256];
-    SingleInputFile* p = SingleInputFile::GetInstance();
-    p->GetNameBody( input_image );
-    p->GetNameBody( input_image_LR1 );
-    strcat( input_image, ".bmp" );
-    strcat( input_image_LR1, "_LR1.bmp" );
-
-    // Run python
-    std::string EXEC_PYTHON("python correct_pixel_value.py ");
-    EXEC_PYTHON += input_image;
-    EXEC_PYTHON += " ";
-    EXEC_PYTHON += input_image_LR1;
-    system( EXEC_PYTHON.c_str() );
-} // End runPython()
+} // End mainsub_spbr()
