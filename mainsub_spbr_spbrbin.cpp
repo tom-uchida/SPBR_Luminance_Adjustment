@@ -6,9 +6,9 @@
 #include <kvs/Version> //KVS2
 
 #if KVS_VERSION_MAJOR == 1
-  #include <kvs/glew/ParticleBasedRenderer> //KVS1
+    #include <kvs/glew/ParticleBasedRenderer> //KVS1
 #elif KVS_VERSION_MAJOR == 2
-  #include <kvs/ParticleBasedRenderer> //KVS2
+    #include <kvs/ParticleBasedRenderer> //KVS2
 #endif
 
 #include <kvs/glut/Screen>
@@ -30,6 +30,8 @@
 #include "toolxform.h"
 
 #include "mainfn_utility.h"
+
+#include "luminance_adjustment.h" // UCHIDA
 
 //#define DEBUG_MAIN
 
@@ -64,6 +66,13 @@ int mainsub_spbr_spbrbin ( int argc, char** argv )
         }
 
     }//for 
+
+    // UCHIDA
+    // Adjust luminance
+    if ( spbr_engine->isLuminanceAdjustment() ) {
+        LuminanceAdjustment* la = new LuminanceAdjustment(LuminanceAdjustment::SPBR_BINARY);
+        return la->mainsub_spbr( &app, argc, argv, spbr_engine, object);
+    }
 
     // Set the total bounding box
     //   Note: This updates the total bounding box of the 
@@ -177,5 +186,4 @@ int mainsub_spbr_spbrbin ( int argc, char** argv )
 
     // Start
     return( app.run() );
-
 } // mainsub_spbr_spbrbin ()

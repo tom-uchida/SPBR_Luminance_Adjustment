@@ -5,9 +5,9 @@
 #if !defined  SPECIAL_COMMENT_HH
 #define       SPECIAL_COMMENT_HH
 
+// UCHIDA
 // #/LuminanceAdjustment 1 or 0 (default: 0)
-const char LUMINANCE_ADJUSTMENT[] = "#/LuminanceAdjustment"; // UCHIDA
-
+const char LUMINANCE_ADJUSTMENT[] = "#/LuminanceAdjustment"; 
 // #/Origin O.x O.y O.z
 const char ORIGIN_COMMAND           [] = "#/Origin";
 

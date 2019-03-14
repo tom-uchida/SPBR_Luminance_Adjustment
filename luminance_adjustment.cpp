@@ -8,9 +8,9 @@
 #include <kvs/Version> //KVS2
 
 #if KVS_VERSION_MAJOR == 1
-  #include <kvs/glew/ParticleBasedRenderer> //KVS1
+    #include <kvs/glew/ParticleBasedRenderer> //KVS1
 #elif KVS_VERSION_MAJOR == 2
-  #include <kvs/ParticleBasedRenderer> //KVS2
+    #include <kvs/ParticleBasedRenderer> //KVS2
 #endif
 
 #include <kvs/glut/Screen>
@@ -34,13 +34,23 @@
 #include <kvs/glut/Timer>
 #include "control_object_renderer.h"
 
-LuminanceAdjustment::LuminanceAdjustment()
+LuminanceAdjustment::LuminanceAdjustment(FILE_FORMAT file_format):
+    m_file_format(file_format)
 {
-    //---- Message
+    // Message
     std::cout << "\n\n===== Luminance Adjustment ====="             << std::endl;
     std::cout << "        Tomomasa Uchida"                          << std::endl;
-    std::cout << "           2019/02/28"                            << std::endl;
+    std::cout << "          2019/03/14"                             << std::endl;
     std::cout << "\n** LuminanceAdjustment constructor is called."  << std::endl;
+
+    // if ( m_file_format == SPBR_ASCII )
+    //     std::cout << "** FILE_FORMAT : SPBR_ASCII"  << std::endl;
+    // else if ( m_file_format == SPBR_BINARY )
+    //     std::cout << "** FILE_FORMAT : SPBR_BINARY" << std::endl;
+    // else if ( m_file_format == PLY_ASCII )
+    //     std::cout << "** FILE_FORMAT : PLY_ASCII"   << std::endl;
+    // else if ( m_file_format == PLY_BINARY )
+    //     std::cout << "** FILE_FORMAT : PLY_BINARY"  << std::endl;
 }
 
 int LuminanceAdjustment::mainsub_spbr(
@@ -48,7 +58,7 @@ int LuminanceAdjustment::mainsub_spbr(
     int                     argc,
     char**                  argv,
     SPBR*                   spbr_engine,
-    kvs::PointObject*       object )
+    kvs::PointObject*       object)
 {
     // Set the total bounding box
     //   Note: This updates the total bounding box of the 

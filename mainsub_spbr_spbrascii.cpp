@@ -70,9 +70,8 @@ int mainsub_spbr_spbrascii ( int argc, char** argv )
     // UCHIDA
     // Adjust luminance
     if ( spbr_engine->isLuminanceAdjustment() ) {
-        //LuminanceAdjustment* la = new LuminanceAdjustment();
-        std::cout << "\nisLuminanceAdjustment()" << std::endl;
-        return LuminanceAdjustment::mainsub_spbr( &app, argc, argv, spbr_engine, object );
+        LuminanceAdjustment* la = new LuminanceAdjustment(LuminanceAdjustment::SPBR_ASCII);
+        return la->mainsub_spbr( &app, argc, argv, spbr_engine, object);
     }
 
     // Set the total bounding box
