@@ -1,7 +1,7 @@
 ////////////////////////////////////////
 //   @file   luminance_adjustment.h
 //   @author Tomomasa Uchida
-//   @date   2019/03/14
+//   @date   2019/03/16
 ////////////////////////////////////////
 
 #if !defined  LUMINANCE_ADJUSTMENT_H
@@ -23,7 +23,7 @@ public:
     LuminanceAdjustment();
     LuminanceAdjustment(FILE_FORMAT file_format);
 
-    static int mainsub_spbr(
+    int mainsub_spbr(
         kvs::glut::Application* app,
         int                     argc,
         char**                  argv,

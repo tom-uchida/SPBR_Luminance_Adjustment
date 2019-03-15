@@ -31,7 +31,14 @@
 #include "mainfn_utility.h"
 #include "shuffle.h"
 
-#include "luminance_adjustment.h" // UCHIDA
+// Prototype declaration
+int mainsub_luminance_adjustment(
+    kvs::glut::Application*             app,
+    int                                 argc,
+    char**                              argv,
+    SPBR*                               spbr_engine,
+    kvs::PointObject*                   object,
+    LuminanceAdjustment::FILE_FORMAT    file_format);
 
 //#define DEBUG_MAIN
 
@@ -70,7 +77,7 @@ int mainsub_spbr_plybin ( int argc, char** argv )
     // UCHIDA
     // Adjust luminance
     if ( spbr_engine->isLuminanceAdjustment() ) {
-        return LuminanceAdjustment::mainsub_spbr(   
+        return mainsub_luminance_adjustment(
                 /* kvs::glut::Application*  */  &app, 
                 /* int                      */  argc, 
                 /* char**                   */  argv, 

@@ -37,7 +37,6 @@
 #include "spbr.h"//
 #include "mainfn_utility.h"
 
-#include "control_object_renderer.h" // UCHIDA
 #include "luminance_adjustment.h" // UCHIDA
 
 const kvs::Vector3f DEFAULT_LIGHT_POSITION (12.0, 12.0, 12.0) ;
@@ -60,21 +59,20 @@ private:
 
 public:
     // Constructor
-    TimerEvent( int 					argc,
+    TimerEvent( LuminanceAdjustment*    la,
+                int 					argc,
                 char**					argv,
                 kvs::glut::Timer*		timer,
                 kvs::Scene* 			scene,
                 SPBR* 					spbr_engine,
                 const int 				original_repeat_level ) : 
+        m_la( la ),
         m_argc( argc ),
         m_argv( argv ),
         m_repeat_level( original_repeat_level ),
         m_scene( scene ),
         m_spbr_engine( spbr_engine )
     {
-        // Instantiate class LuminanceAdjustment
-        m_la = new LuminanceAdjustment();
-
         // Get filename for snapshots
         m_sif->GetNameBody( m_filename_tmp );
         m_filename = m_filename_tmp;
@@ -98,7 +96,7 @@ public:
                 std::cout << "\nSnapshot succeeded." << std::endl;
                 std::cout << "================================" << std::endl;
 
-                // 輝度値補正
+                // ----- Adjust luminance of the image
 
                 //exit(0);
             }
