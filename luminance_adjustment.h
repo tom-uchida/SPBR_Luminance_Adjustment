@@ -20,15 +20,25 @@ public:
     };
 
     // Constructor
+    LuminanceAdjustment();
     LuminanceAdjustment(FILE_FORMAT file_format);
 
-    int mainsub_spbr(
+    static int mainsub_spbr(
         kvs::glut::Application* app,
         int                     argc,
         char**                  argv,
         SPBR*                   spbr_engine,
-        kvs::PointObject*       object
+        kvs::PointObject*       object,
+        FILE_FORMAT             file_format
     );
+
+    // Functions to control Object and Renderer
+    static void RegisterObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
+    static kvs::PointObject* CreateObject(int argc, char** argv);
+    static kvs::glsl::ParticleBasedRenderer* CreateRenderer( SPBR* spbr_engine, const size_t LR);
+    void SetObject( SPBR* spbr_engine, kvs::PointObject* object );
+    void ReplaceObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
+    void SnapshotImage( kvs::Scene* scene, const std::string filename );
 
 private:
     FILE_FORMAT m_file_format;

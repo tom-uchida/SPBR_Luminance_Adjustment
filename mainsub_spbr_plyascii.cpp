@@ -76,8 +76,13 @@ int mainsub_spbr_plyascii ( int argc, char** argv )
     // UCHIDA
     // Adjust luminance
     if ( spbr_engine->isLuminanceAdjustment() ) {
-        LuminanceAdjustment* la = new LuminanceAdjustment(LuminanceAdjustment::PLY_ASCII);
-        return la->mainsub_spbr( &app, argc, argv, spbr_engine, object);
+        return LuminanceAdjustment::mainsub_spbr(   
+                /* kvs::glut::Application*  */  &app, 
+                /* int                      */  argc, 
+                /* char**                   */  argv, 
+                /* SPBR*                    */  spbr_engine, 
+                /* kvs::PointObject*        */  object, 
+                /* FILE_FORMAT              */  LuminanceAdjustment::PLY_ASCII );
     }
 
     // Set the total bounding box
