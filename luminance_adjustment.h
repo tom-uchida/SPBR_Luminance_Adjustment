@@ -38,12 +38,21 @@ public:
     static kvs::glsl::ParticleBasedRenderer* CreateRenderer( SPBR* spbr_engine, const size_t LR);
     void SetObject( SPBR* spbr_engine, kvs::PointObject* object );
     void ReplaceObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
-    void SnapshotImage( kvs::Scene* scene, const std::string filename );
+    void SnapshotImage( kvs::Scene* scene, const std::string filename, const int repeat_level );
+    size_t getSnapshotCounter() const { return m_snapshot_counter; };
+
+    // Functions to adjust luminance of the image
+    void adjustLuminance();
+    void setBackgroundColor( kvs::RGBColor bgcolor ) { m_bgcolor = bgcolor; };
+    int calcNumOfPixelsNonBGColor( const kvs::ColorImage& image );
+    kvs::UInt8 calcMaxPixelValue( const kvs::GrayImage& image );
 
 private:
-    FILE_FORMAT m_file_format;
-
-    void adjustLuminance(std::string img_name, std::string img_name_LR1);
+    FILE_FORMAT     m_file_format;
+    size_t          m_snapshot_counter = 0;
+    kvs::RGBColor   m_bgcolor;
+    kvs::ColorImage m_img_Color, m_img_Color_LR1;
+    const float     m_ratio_of_reference_section = 0.01; // 1(%)
 };
 
 #endif // end of luminance_adjustment.h

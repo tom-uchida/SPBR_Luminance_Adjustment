@@ -50,60 +50,53 @@ private:
     int     			 m_argc;
     char**  			 m_argv;
     size_t  			 m_repeat_level;
-    char        		 m_filename_tmp[256];
     std::string			 m_filename;
     kvs::Scene* 		 m_scene;
     SPBR*				 m_spbr_engine;
-    SingleInputFile* 	 m_sif = SingleInputFile::GetInstance();
     LuminanceAdjustment* m_la;
 
 public:
     // Constructor
     TimerEvent( LuminanceAdjustment*    la,
-                int 					argc,
-                char**					argv,
-                kvs::glut::Timer*		timer,
+                int 			        argc,
+                char**			        argv,
                 kvs::Scene* 			scene,
                 SPBR* 					spbr_engine,
                 const int 				original_repeat_level ) : 
-        m_la( la ),
         m_argc( argc ),
         m_argv( argv ),
         m_repeat_level( original_repeat_level ),
         m_scene( scene ),
-        m_spbr_engine( spbr_engine )
+        m_spbr_engine( spbr_engine ),
+        m_la( la )
     {
         // Get filename for snapshots
+        SingleInputFile* m_sif = SingleInputFile::GetInstance();
+        char m_filename_tmp[256];
         m_sif->GetNameBody( m_filename_tmp );
         m_filename = m_filename_tmp;
     }
 
     void update( kvs::TimeEvent* event ) {
-        static size_t snapshot_counter = 1;
+        if ( m_la->getSnapshotCounter() < m_num_of_snapshots ) {
+            m_la->SnapshotImage( m_scene, m_filename, m_repeat_level );
 
-        if ( snapshot_counter <= m_num_of_snapshots ) {
-            std::string filename = m_filename + "_LR" +kvs::String::ToString(m_repeat_level) + ".bmp";
-            m_la->SnapshotImage( m_scene, filename );
-            std::cerr << "** Snapshot repeat level \"" << m_repeat_level << "\" image (BMP)" << std::endl;
-
-            if ( snapshot_counter == 1 ) {
+            if ( m_la->getSnapshotCounter() == 1 ) {
                 m_repeat_level = 1;
                 std::cout << "** Forcibly, repeat level is set to \"1\".\n" << std::endl;
                 m_la->ReplaceObject( m_scene, m_argc, m_argv, m_spbr_engine, m_repeat_level);
-                std::cout << "** Replaced object and renderer." << std::endl;
 
-            } else if ( snapshot_counter == 2 ) {
+            } else if ( m_la->getSnapshotCounter() == 2 ) {
                 std::cout << "\nSnapshot succeeded." << std::endl;
+                std::cout << "\nSPBR ended successfully." << std::endl;
                 std::cout << "================================" << std::endl;
-
-                // ----- Adjust luminance of the image
-
-                //exit(0);
             }
 
-            snapshot_counter++;
-        } // end if
-
+        } else {
+            std::cout << "\nAdjusting luminance of the image..." << std::endl;
+            m_la->adjustLuminance();
+            exit(0);
+        }
     } // End update()
 };
 

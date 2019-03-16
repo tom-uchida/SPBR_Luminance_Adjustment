@@ -74,6 +74,7 @@ int mainsub_luminance_adjustment(
     // Forcibly, set background color "Black"
     screen.setBackgroundColor( kvs::RGBColor(0, 0, 0) );
     std::cout << "** Forcibly, background color is set to \"black\"." << std::endl;
+    la->setBackgroundColor( kvs::RGBColor(0, 0, 0) );
 
     // Set window title
     setWindowTitle( SPBR_WINDOW_TITLE, &screen );
@@ -87,16 +88,15 @@ int mainsub_luminance_adjustment(
     screen.addEvent( &key );
 
     // Add timer event
-    const int sec = 1; // sec
-    kvs::glut::Timer timer( sec*1000 ); // msec
     TimerEvent timer_event(
         /* LuminanceAdjustment* */  la, 
         /* int                  */  argc, 
         /* char**               */  argv, 
-        /* kvs::glut::Timer*    */  &timer, 
         /* kvs::Scene*          */  screen.scene(), 
         /* SPBR*                */  spbr_engine, 
         /* const int            */  original_repeat_level);
+    const int sec = 1; // sec
+    kvs::glut::Timer timer( sec*1000 ); // msec
     screen.addTimerEvent( &timer_event, &timer );
     screen.addEvent( &timer_event );
 

@@ -28,6 +28,8 @@
 #include "mainfn_utility.h"
 
 #include "luminance_adjustment.h"
+#include <kvs/ColorImage>
+#include <kvs/GrayImage>
 
 LuminanceAdjustment::LuminanceAdjustment()
 {
@@ -111,7 +113,7 @@ void LuminanceAdjustment::SetObject( SPBR* spbr_engine, kvs::PointObject* object
         double xrot_deg = spbr_engine->objectZXRotAngle (1) ; 
         ToolXform::rotateZX( object, zrot_deg, xrot_deg, kvs::Vector3f( 0, 0, 0 ) );
     }
-} // End SetObject
+} // End SetObject()
 
 kvs::glsl::ParticleBasedRenderer* LuminanceAdjustment::CreateRenderer( SPBR* spbr_engine, const size_t LR)
 {
@@ -147,16 +149,78 @@ kvs::glsl::ParticleBasedRenderer* LuminanceAdjustment::CreateRenderer( SPBR* spb
     return renderer;
 } // End CreateRenderer()
 
-
-
 void LuminanceAdjustment::ReplaceObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR )
 {
     scene->replaceObject( "Object", CreateObject(argc, argv) );
     scene->replaceRenderer( "Renderer", CreateRenderer(spbr_engine, LR) );
-} // End ReplaceObject
+    std::cout << "** Replaced object and renderer." << std::endl;
+} // End ReplaceObject()
 
-void LuminanceAdjustment::SnapshotImage( kvs::Scene* scene, const std::string filename )
-{
+void LuminanceAdjustment::SnapshotImage( kvs::Scene* scene, const std::string filename, const int repeat_level ) {
+    // Snapshot
     scene->screen()->redraw();
-    scene->camera()->snapshot().write( filename );
-} // End SnapshotImage
+    kvs::ColorImage color_image_tmp = scene->camera()->snapshot();
+
+    // Save color image
+    if ( m_snapshot_counter == 0 ) m_img_Color       = color_image_tmp;
+    if ( m_snapshot_counter == 1 ) m_img_Color_LR1   = color_image_tmp;
+
+    // Write color image
+    color_image_tmp.write( filename + "_LR" + kvs::String::ToString(repeat_level) + ".bmp" );
+    std::cout << "** Snapshot repeat level \"" << repeat_level << "\" image (BMP)" << std::endl;
+
+    m_snapshot_counter++;
+} // End snapshotTwoImages()
+
+void LuminanceAdjustment::adjustLuminance() {
+    size_t N_all = m_img_Color.numberOfPixels();
+    size_t N_all_non_bgcolor = calcNumOfPixelsNonBGColor( m_img_Color );
+    std::cout << "** Num. of Pixels             : " << N_all << "(pixels)" << std::endl;
+    std::cout << "** Num. of Pixels non BGColor : " << N_all_non_bgcolor << "(pixels)" << std::endl;
+
+    // Convert color to gray
+    kvs::GrayImage img_Gray( m_img_Color );
+    kvs::GrayImage img_Gray_LR1( m_img_Color_LR1 );
+
+    // ====================================
+    //  STEP1 : Get max pixel value (LR=1)
+    // ====================================
+    kvs::UInt8 max_pixel_value_LR1 = calcMaxPixelValue(img_Gray_LR1);
+    std::cout << "** Max pixel value (LR=1)     : " << +max_pixel_value_LR1 << "(pixel value)" << std::endl;
+
+    // =================================================
+    //  STEP2 : Search for reference pixel value (LR=1)
+    // =================================================
+
+} // End adjustLuminance()
+
+inline int LuminanceAdjustment::calcNumOfPixelsNonBGColor( const kvs::ColorImage& color_image ) {
+    size_t counter = 0;
+    kvs::RGBColor pixel;
+
+    for ( size_t j = 0; j < color_image.height(); j++ ) {
+        for ( size_t i = 0; i < color_image.width(); i++ ) {
+            if ( color_image.pixel( i, j ) == m_bgcolor ) {
+            } else { counter++; }
+        }
+    }
+
+    return counter;
+} // End calcNumOfPixelsNonBGColor()
+
+inline kvs::UInt8 LuminanceAdjustment::calcMaxPixelValue( const kvs::GrayImage& gray_image ) {
+    kvs::UInt8 max_pixel_value = 0;
+
+    for ( size_t j = 0; j < gray_image.height(); j++ ) {
+        for ( size_t i = 0; i < gray_image.width(); i++ ) {
+            if ( gray_image.pixel( i, j ) > max_pixel_value) 
+                max_pixel_value = gray_image.pixel( i, j );
+        }
+    }
+
+    return max_pixel_value;
+} // End calcMaxPixelValue()
+
+// kvs:: LuminanceAdjustment::calcMaxPixelValue() {
+
+// }
