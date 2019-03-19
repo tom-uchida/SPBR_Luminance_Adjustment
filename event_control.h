@@ -88,7 +88,7 @@ public:
 
             } else if ( m_la->getSnapshotCounter() == 2 ) {
                 std::cout << "\nSnapshot succeeded." << std::endl;
-                std::cout << "\nSPBR ended successfully." << std::endl;
+                std::cout << "SPBR ended successfully." << std::endl;
                 std::cout << "================================" << std::endl;
             }
 

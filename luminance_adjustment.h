@@ -46,6 +46,7 @@ public:
     void setBackgroundColor( kvs::RGBColor bgcolor ) { m_bgcolor = bgcolor; };
     int calcNumOfPixelsNonBGColor( const kvs::ColorImage& image );
     kvs::UInt8 calcMaxPixelValue( const kvs::GrayImage& image );
+    kvs::UInt8 searchReferencePixelValue(const kvs::GrayImage& gray_image, const size_t N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1);
 
 private:
     FILE_FORMAT     m_file_format;

@@ -191,7 +191,13 @@ void LuminanceAdjustment::adjustLuminance() {
     // =================================================
     //  STEP2 : Search for reference pixel value (LR=1)
     // =================================================
-    kvs::UInt8 reference_pixel_value_LR1 = searchReferencePixelValue(img_Gray_LR1, N_all_non_bgcolor, max_pixel_value_LR1);
+    size_t N_all_non_bgcolor_LR1 = calcNumOfPixelsNonBGColor( m_img_Color_LR1 );
+    kvs::UInt8 reference_pixel_value_LR1 = searchReferencePixelValue(img_Gray_LR1, N_all_non_bgcolor_LR1, max_pixel_value_LR1);
+    std::cout << "Reference pixel value (LR=1)  : " << +reference_pixel_value_LR1 << std::endl;
+
+    // ==========================
+    //  STEP3 : Adjust luminance
+    // ==========================
 
 
 } // End adjustLuminance()
@@ -215,7 +221,7 @@ inline kvs::UInt8 LuminanceAdjustment::calcMaxPixelValue( const kvs::GrayImage& 
 
     for ( size_t j = 0; j < gray_image.height(); j++ ) {
         for ( size_t i = 0; i < gray_image.width(); i++ ) {
-            if ( gray_image.pixel( i, j ) > max_pixel_value) 
+            if ( gray_image.pixel( i, j ) > max_pixel_value ) 
                 max_pixel_value = gray_image.pixel( i, j );
         }
     }
@@ -223,13 +229,26 @@ inline kvs::UInt8 LuminanceAdjustment::calcMaxPixelValue( const kvs::GrayImage& 
     return max_pixel_value;
 } // End calcMaxPixelValue()
 
-inline kvs::UInt8 LuminanceAdjustment::searchReferencePixelValue(const kvs::GrayImage& gray_image, const kvs::UInt8 N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1) {
-    kvs::UInt8 reference_pixel_value = 0;
+inline kvs::UInt8 LuminanceAdjustment::searchReferencePixelValue(const kvs::GrayImage& gray_image, const size_t N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1) {
+    kvs::UInt8 reference_pixel_value = max_pixel_value_LR1;
+    float ratio_tmp = 0.0;
 
     // Search for reference pixel value
-    do {
-        tmp = XXX / N_all_non_bgcolor;
-    } while (  < m_ratio_of_reference_section );
+    while ( ratio_tmp < m_ratio_of_reference_section ) {
+        int counter = 0;
+        for ( size_t j = 0; j < gray_image.height(); j++ ) {
+            for ( size_t i = 0; i < gray_image.width(); i++ ) {
+                if ( gray_image.pixel( i, j ) >= reference_pixel_value ) 
+                    counter++;
+            }
+        }
+
+        ratio_tmp = float(counter) / float(N_all_non_bgcolor);
+        //std::cout << "ratio_tmp : " << ratio_tmp << std::endl;
+
+        // Next pixel value
+        reference_pixel_value--;
+    }
 
     return reference_pixel_value;
 }
