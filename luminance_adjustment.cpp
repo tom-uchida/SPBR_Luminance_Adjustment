@@ -175,8 +175,8 @@ void LuminanceAdjustment::SnapshotImage( kvs::Scene* scene, const std::string fi
 void LuminanceAdjustment::adjustLuminance() {
     size_t N_all = m_img_Color.numberOfPixels();
     size_t N_all_non_bgcolor = calcNumOfPixelsNonBGColor( m_img_Color );
-    std::cout << "** Num. of Pixels             : " << N_all << "(pixels)" << std::endl;
-    std::cout << "** Num. of Pixels non BGColor : " << N_all_non_bgcolor << "(pixels)" << std::endl;
+    std::cout << "** Num. of pixels             : " << N_all             << "(pixels)" << std::endl;
+    std::cout << "** Num. of pixels non BGColor : " << N_all_non_bgcolor << "(pixels)" << std::endl;
 
     // Convert color to gray
     kvs::GrayImage img_Gray( m_img_Color );
@@ -191,6 +191,8 @@ void LuminanceAdjustment::adjustLuminance() {
     // =================================================
     //  STEP2 : Search for reference pixel value (LR=1)
     // =================================================
+    kvs::UInt8 reference_pixel_value_LR1 = searchReferencePixelValue(img_Gray_LR1, N_all_non_bgcolor, max_pixel_value_LR1);
+
 
 } // End adjustLuminance()
 
@@ -221,6 +223,13 @@ inline kvs::UInt8 LuminanceAdjustment::calcMaxPixelValue( const kvs::GrayImage& 
     return max_pixel_value;
 } // End calcMaxPixelValue()
 
-// kvs:: LuminanceAdjustment::calcMaxPixelValue() {
+inline kvs::UInt8 LuminanceAdjustment::searchReferencePixelValue(const kvs::GrayImage& gray_image, const kvs::UInt8 N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1) {
+    kvs::UInt8 reference_pixel_value = 0;
 
-// }
+    // Search for reference pixel value
+    do {
+        tmp = XXX / N_all_non_bgcolor;
+    } while (  < m_ratio_of_reference_section );
+
+    return reference_pixel_value;
+}

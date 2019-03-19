@@ -1,5 +1,6 @@
 CPV_UCHIDA/
 SPBR_DATA/
+PLY_DATA/
 
 *.o
 *.cc
