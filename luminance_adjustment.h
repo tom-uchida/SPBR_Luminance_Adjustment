@@ -48,10 +48,10 @@ public:
     int         calcNumOfPixelsNonBGColor( const kvs::ColorImage& image );
     kvs::UInt8  calcMaxPixelValue( const kvs::GrayImage& image );
     kvs::UInt8  searchReferencePixelValue(const kvs::GrayImage& gray_image, const size_t N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1);
-    float       calcAdjustmentParameter(kvs::ColorImage color_image, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor );
-    float       tempolarilyAdjustLuminance( kvs::ColorImage color_image, const float p, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor );
+    float       calcAdjustmentParameter(const kvs::ColorImage& color_image, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor );
+    float       tempolarilyAdjustLuminance( const kvs::ColorImage& color_image, const float p, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor );
     kvs::ColorImage deepCopyColorImage( const kvs::ColorImage& other );
-    void doLuminanceAdjustment( kvs::ColorImage& color_image, const float p );
+    void        doLuminanceAdjustment( kvs::ColorImage& color_image, const float p );
 
 private:
     FILE_FORMAT     m_file_format;

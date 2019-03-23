@@ -195,13 +195,17 @@ void LuminanceAdjustment::adjustLuminance()
     // =================================================
     size_t N_all_non_bgcolor_LR1 = calcNumOfPixelsNonBGColor( m_img_Color_LR1 );
     kvs::UInt8 reference_pixel_value_LR1 = searchReferencePixelValue( img_Gray_LR1, N_all_non_bgcolor_LR1, max_pixel_value_LR1 );
-    std::cout << "** Reference pixel value (LR=1) : " << +reference_pixel_value_LR1 << " (pixel value)"　<< std::endl;
+    std::cout << "** Reference pixel value (LR=1) : " << +reference_pixel_value_LR1 << " (pixel value)" << std::endl;
 
     // ==========================
     //  STEP3 : Adjust luminance
     // ==========================
     float p = calcAdjustmentParameter( m_img_Color, reference_pixel_value_LR1, N_all_non_bgcolor );
+    doLuminanceAdjustment( m_img_Color, p );
     std::cout << "** Adjustment parameter         : " << p << std::endl;
+
+    // Write adjusted image
+    m_img_Color.write( "SPBR_DATA/haiden/adjusted.bmp" );
 } // End adjustLuminance()
 
 inline int LuminanceAdjustment::calcNumOfPixelsNonBGColor( const kvs::ColorImage& color_image )
@@ -258,30 +262,26 @@ inline kvs::UInt8 LuminanceAdjustment::searchReferencePixelValue(const kvs::Gray
     return reference_pixel_value;
 } // End searchReferencePixelValue()
 
-float LuminanceAdjustment::calcAdjustmentParameter( kvs::ColorImage color_image, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor )
+float LuminanceAdjustment::calcAdjustmentParameter( const kvs::ColorImage& color_image, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor )
 {
     float adjustment_parameter = 1.0;
     float tmp_ratio_of_reference_section = 0.0;
     
     while ( tmp_ratio_of_reference_section < m_ratio_of_reference_section ) {
+        // Update adjustment parameter
+        adjustment_parameter += 0.1;
+
         tmp_ratio_of_reference_section = tempolarilyAdjustLuminance(
             /* kvs::ColorImage  */ color_image, 
             /* const float      */ adjustment_parameter, 
             /* const kvs::UInt8 */ reference_pixel_value_LR1, 
             /* const size_t     */ N_all_non_bgcolor );
-
-        // Update adjustment parameter
-        adjustment_parameter += 0.1;
     } // end while
 
-    // Adjust luminance
-    doLuminanceAdjustment( color_image, adjustment_parameter );
-    color_image.write( "SPBR_DATA/haiden/adjusted.bmp" );
-
-    return adjustment_parameter;
+    return adjustment_parameter -= 0.1;
 } // End doLuminanceAdjustment()
 
-inline float LuminanceAdjustment::tempolarilyAdjustLuminance( kvs::ColorImage color_image, const float p, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor )
+inline float LuminanceAdjustment::tempolarilyAdjustLuminance( const kvs::ColorImage& color_image, const float p, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor )
 {
     kvs::ColorImage color_image_tmp = deepCopyColorImage( color_image );
     doLuminanceAdjustment( color_image_tmp, p );
@@ -295,7 +295,10 @@ inline float LuminanceAdjustment::tempolarilyAdjustLuminance( kvs::ColorImage co
             if ( gray_image_tmp.pixel( i, j ) >= reference_pixel_value_LR1 ) 
                 counter++;
 
-    return float(counter) / float(N_all_non_bgcolor);
+    float tmp_ratio = float(counter) / float(N_all_non_bgcolor);
+    std::cout << "** ( parameter, ratio )         : (" << p << ", " << tmp_ratio << ")" << std::endl;
+
+    return tmp_ratio;
 } // End 
 
 inline kvs::ColorImage LuminanceAdjustment::deepCopyColorImage( const kvs::ColorImage& other )
