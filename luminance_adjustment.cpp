@@ -46,7 +46,7 @@ LuminanceAdjustment::LuminanceAdjustment(FILE_FORMAT file_format):
     // Message
     std::cout << "\n\n===== Luminance Adjustment ====="             << std::endl;
     std::cout << "        Tomomasa Uchida"                          << std::endl;
-    std::cout << "          2019/03/14"                             << std::endl;
+    std::cout << "          2019/03/23"                             << std::endl;
     std::cout << "\n** LuminanceAdjustment constructor is called."  << std::endl;
 
     // if ( m_file_format == SPBR_ASCII )
@@ -156,7 +156,8 @@ void LuminanceAdjustment::ReplaceObject( kvs::Scene* scene, int argc, char** arg
     std::cout << "** Replaced object and renderer." << std::endl;
 } // End ReplaceObject()
 
-void LuminanceAdjustment::SnapshotImage( kvs::Scene* scene, const std::string filename, const int repeat_level ) {
+void LuminanceAdjustment::SnapshotImage( kvs::Scene* scene, const std::string filename, const int repeat_level )
+{
     // Snapshot
     scene->screen()->redraw();
     kvs::ColorImage color_image_tmp = scene->camera()->snapshot();
@@ -172,11 +173,12 @@ void LuminanceAdjustment::SnapshotImage( kvs::Scene* scene, const std::string fi
     m_snapshot_counter++;
 } // End snapshotTwoImages()
 
-void LuminanceAdjustment::adjustLuminance() {
+void LuminanceAdjustment::adjustLuminance()
+{
     size_t N_all = m_img_Color.numberOfPixels();
     size_t N_all_non_bgcolor = calcNumOfPixelsNonBGColor( m_img_Color );
-    std::cout << "** Num. of pixels             : " << N_all             << "(pixels)" << std::endl;
-    std::cout << "** Num. of pixels non BGColor : " << N_all_non_bgcolor << "(pixels)" << std::endl;
+    std::cout << "** Num. of pixels               : " << N_all             << " (pixels)" << std::endl;
+    std::cout << "** Num. of pixels non BGColor   : " << N_all_non_bgcolor << " (pixels)" << std::endl;
 
     // Convert color to gray
     kvs::GrayImage img_Gray( m_img_Color );
@@ -185,24 +187,25 @@ void LuminanceAdjustment::adjustLuminance() {
     // ====================================
     //  STEP1 : Get max pixel value (LR=1)
     // ====================================
-    kvs::UInt8 max_pixel_value_LR1 = calcMaxPixelValue(img_Gray_LR1);
-    std::cout << "** Max pixel value (LR=1)     : " << +max_pixel_value_LR1 << "(pixel value)" << std::endl;
+    kvs::UInt8 max_pixel_value_LR1 = calcMaxPixelValue( img_Gray_LR1 );
+    std::cout << "** Max pixel value (LR=1)       : " << +max_pixel_value_LR1 << " (pixel value)" << std::endl;
 
     // =================================================
-    //  STEP2 : Search for reference pixel value (LR=1)
+    //  STEP2 : Search for reference pixel value (LR=1) 
     // =================================================
     size_t N_all_non_bgcolor_LR1 = calcNumOfPixelsNonBGColor( m_img_Color_LR1 );
-    kvs::UInt8 reference_pixel_value_LR1 = searchReferencePixelValue(img_Gray_LR1, N_all_non_bgcolor_LR1, max_pixel_value_LR1);
-    std::cout << "Reference pixel value (LR=1)  : " << +reference_pixel_value_LR1 << std::endl;
+    kvs::UInt8 reference_pixel_value_LR1 = searchReferencePixelValue( img_Gray_LR1, N_all_non_bgcolor_LR1, max_pixel_value_LR1 );
+    std::cout << "** Reference pixel value (LR=1) : " << +reference_pixel_value_LR1 << " (pixel value)"　<< std::endl;
 
     // ==========================
     //  STEP3 : Adjust luminance
     // ==========================
-
-
+    float p = calcAdjustmentParameter( m_img_Color, reference_pixel_value_LR1, N_all_non_bgcolor );
+    std::cout << "** Adjustment parameter         : " << p << std::endl;
 } // End adjustLuminance()
 
-inline int LuminanceAdjustment::calcNumOfPixelsNonBGColor( const kvs::ColorImage& color_image ) {
+inline int LuminanceAdjustment::calcNumOfPixelsNonBGColor( const kvs::ColorImage& color_image )
+{
     size_t counter = 0;
     kvs::RGBColor pixel;
 
@@ -216,7 +219,8 @@ inline int LuminanceAdjustment::calcNumOfPixelsNonBGColor( const kvs::ColorImage
     return counter;
 } // End calcNumOfPixelsNonBGColor()
 
-inline kvs::UInt8 LuminanceAdjustment::calcMaxPixelValue( const kvs::GrayImage& gray_image ) {
+inline kvs::UInt8 LuminanceAdjustment::calcMaxPixelValue( const kvs::GrayImage& gray_image )
+{
     kvs::UInt8 max_pixel_value = 0;
 
     for ( size_t j = 0; j < gray_image.height(); j++ ) {
@@ -229,7 +233,8 @@ inline kvs::UInt8 LuminanceAdjustment::calcMaxPixelValue( const kvs::GrayImage& 
     return max_pixel_value;
 } // End calcMaxPixelValue()
 
-inline kvs::UInt8 LuminanceAdjustment::searchReferencePixelValue(const kvs::GrayImage& gray_image, const size_t N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1) {
+inline kvs::UInt8 LuminanceAdjustment::searchReferencePixelValue(const kvs::GrayImage& gray_image, const size_t N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1)
+{
     kvs::UInt8 reference_pixel_value = max_pixel_value_LR1;
     float ratio_tmp = 0.0;
 
@@ -248,7 +253,85 @@ inline kvs::UInt8 LuminanceAdjustment::searchReferencePixelValue(const kvs::Gray
 
         // Next pixel value
         reference_pixel_value--;
-    }
+    } // end while
 
     return reference_pixel_value;
-}
+} // End searchReferencePixelValue()
+
+float LuminanceAdjustment::calcAdjustmentParameter( kvs::ColorImage color_image, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor )
+{
+    float adjustment_parameter = 1.0;
+    float tmp_ratio_of_reference_section = 0.0;
+    
+    while ( tmp_ratio_of_reference_section < m_ratio_of_reference_section ) {
+        tmp_ratio_of_reference_section = tempolarilyAdjustLuminance(
+            /* kvs::ColorImage  */ color_image, 
+            /* const float      */ adjustment_parameter, 
+            /* const kvs::UInt8 */ reference_pixel_value_LR1, 
+            /* const size_t     */ N_all_non_bgcolor );
+
+        // Update adjustment parameter
+        adjustment_parameter += 0.1;
+    } // end while
+
+    // Adjust luminance
+    doLuminanceAdjustment( color_image, adjustment_parameter );
+    color_image.write( "SPBR_DATA/haiden/adjusted.bmp" );
+
+    return adjustment_parameter;
+} // End doLuminanceAdjustment()
+
+inline float LuminanceAdjustment::tempolarilyAdjustLuminance( kvs::ColorImage color_image, const float p, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor )
+{
+    kvs::ColorImage color_image_tmp = deepCopyColorImage( color_image );
+    doLuminanceAdjustment( color_image_tmp, p );
+
+    // Convert color to gray
+    kvs::GrayImage gray_image_tmp( color_image_tmp );
+
+    int counter = 0;
+    for ( size_t j = 0; j < gray_image_tmp.height(); j++ )
+        for ( size_t i = 0; i < gray_image_tmp.width(); i++ )
+            if ( gray_image_tmp.pixel( i, j ) >= reference_pixel_value_LR1 ) 
+                counter++;
+
+    return float(counter) / float(N_all_non_bgcolor);
+} // End 
+
+inline kvs::ColorImage LuminanceAdjustment::deepCopyColorImage( const kvs::ColorImage& other )
+{
+    kvs::ColorImage duplicated_color_image( other.width(), other.height() );
+
+    for ( size_t j = 0; j < other.height(); j++ )
+        for ( size_t i = 0; i < other.width(); i++ )
+                duplicated_color_image.setPixel( i, j, other.pixel( i, j ) );
+
+    return duplicated_color_image;
+} // End deepCopyImage()
+
+inline void LuminanceAdjustment::doLuminanceAdjustment( kvs::ColorImage& color_image, const float p )
+{
+    kvs::RGBColor   pixel;
+    kvs::UInt8      r, g, b;
+
+    for ( size_t j = 0; j < color_image.width(); j++ ) {
+        for ( size_t i = 0; i < color_image.height(); i++ ) {
+            pixel = color_image.pixel( i, j );
+            
+            // Check whether the pixel value exceeds 255 after adjusting.
+            if ( p*pixel.r() > 255 ) r = 255;
+            else                     r = p*pixel.r();
+            
+            if ( p*pixel.g() > 255 ) g = 255;
+            else                     g = p*pixel.g();
+
+            if ( p*pixel.b() > 255 ) b = 255;
+            else                     b = p*pixel.b();
+
+            pixel.set( r, g, b );
+
+            // Apply adjustment
+            color_image.setPixel( i, j, pixel );
+        } // end for
+    } // end for
+} // End doLuminanceAdjustment()

@@ -23,6 +23,7 @@ public:
     LuminanceAdjustment();
     LuminanceAdjustment(FILE_FORMAT file_format);
 
+    // main
     int mainsub_spbr(
         kvs::glut::Application* app,
         int                     argc,
@@ -36,17 +37,21 @@ public:
     static void RegisterObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
     static kvs::PointObject* CreateObject(int argc, char** argv);
     static kvs::glsl::ParticleBasedRenderer* CreateRenderer( SPBR* spbr_engine, const size_t LR);
-    void SetObject( SPBR* spbr_engine, kvs::PointObject* object );
-    void ReplaceObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
-    void SnapshotImage( kvs::Scene* scene, const std::string filename, const int repeat_level );
-    size_t getSnapshotCounter() const { return m_snapshot_counter; };
+    void        SetObject( SPBR* spbr_engine, kvs::PointObject* object );
+    void        ReplaceObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
+    void        SnapshotImage( kvs::Scene* scene, const std::string filename, const int repeat_level );
+    size_t      getSnapshotCounter() const { return m_snapshot_counter; };
 
     // Functions to adjust luminance of the image
-    void adjustLuminance();
-    void setBackgroundColor( kvs::RGBColor bgcolor ) { m_bgcolor = bgcolor; };
-    int calcNumOfPixelsNonBGColor( const kvs::ColorImage& image );
-    kvs::UInt8 calcMaxPixelValue( const kvs::GrayImage& image );
-    kvs::UInt8 searchReferencePixelValue(const kvs::GrayImage& gray_image, const size_t N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1);
+    void        adjustLuminance();
+    void        setBackgroundColor( kvs::RGBColor bgcolor ) { m_bgcolor = bgcolor; };
+    int         calcNumOfPixelsNonBGColor( const kvs::ColorImage& image );
+    kvs::UInt8  calcMaxPixelValue( const kvs::GrayImage& image );
+    kvs::UInt8  searchReferencePixelValue(const kvs::GrayImage& gray_image, const size_t N_all_non_bgcolor, const kvs::UInt8 max_pixel_value_LR1);
+    float       calcAdjustmentParameter(kvs::ColorImage color_image, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor );
+    float       tempolarilyAdjustLuminance( kvs::ColorImage color_image, const float p, const kvs::UInt8 reference_pixel_value_LR1, const size_t N_all_non_bgcolor );
+    kvs::ColorImage deepCopyColorImage( const kvs::ColorImage& other );
+    void doLuminanceAdjustment( kvs::ColorImage& color_image, const float p );
 
 private:
     FILE_FORMAT     m_file_format;
