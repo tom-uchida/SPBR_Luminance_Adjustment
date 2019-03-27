@@ -98,7 +98,7 @@ public:
             exit(0);
         }
     } // End update()
-};
+}; // End TimerEvent class
 
 //------------------------------------------------------------//
 class InitializeEvent : public kvs::InitializeEventListener {

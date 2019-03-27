@@ -1,6 +1,7 @@
 CPV_UCHIDA/
 SPBR_DATA/
 PLY_DATA/
+LA_PYTHON/
 
 *.o
 *.cc

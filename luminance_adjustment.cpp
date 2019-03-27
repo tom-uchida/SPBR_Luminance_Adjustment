@@ -202,7 +202,7 @@ void LuminanceAdjustment::adjustLuminance()
     // ==========================
     float p = calcAdjustmentParameter( m_img_Color, reference_pixel_value_LR1, N_all_non_bgcolor );
     doLuminanceAdjustment( m_img_Color, p );
-    std::cout << "** Adjustment parameter         : " << p << std::endl;
+    std::cout << "** Adjustment parameter         : " << p << "\n" << std::endl;
 
     // Write adjusted image
     m_img_Color.write( "SPBR_DATA/haiden/adjusted.bmp" );
@@ -296,7 +296,7 @@ inline float LuminanceAdjustment::tempolarilyAdjustLuminance( const kvs::ColorIm
                 counter++;
 
     float tmp_ratio = float(counter) / float(N_all_non_bgcolor);
-    std::cout << "** ( parameter, ratio )         : (" << p << ", " << tmp_ratio << ")" << std::endl;
+    std::cout << "**  ( parameter, ratio )        : (" << p << ", " << tmp_ratio << ")" << std::endl;
 
     return tmp_ratio;
 } // End 
@@ -317,8 +317,8 @@ inline void LuminanceAdjustment::doLuminanceAdjustment( kvs::ColorImage& color_i
     kvs::RGBColor   pixel;
     kvs::UInt8      r, g, b;
 
-    for ( size_t j = 0; j < color_image.width(); j++ ) {
-        for ( size_t i = 0; i < color_image.height(); i++ ) {
+    for ( size_t j = 0; j < color_image.height(); j++ ) {
+        for ( size_t i = 0; i < color_image.width(); i++ ) {
             pixel = color_image.pixel( i, j );
             
             // Check whether the pixel value exceeds 255 after adjusting.

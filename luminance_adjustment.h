@@ -1,7 +1,7 @@
 ////////////////////////////////////////
 //   @file   luminance_adjustment.h
 //   @author Tomomasa Uchida
-//   @date   2019/03/16
+//   @date   2019/03/15
 ////////////////////////////////////////
 
 #if !defined  LUMINANCE_ADJUSTMENT_H
