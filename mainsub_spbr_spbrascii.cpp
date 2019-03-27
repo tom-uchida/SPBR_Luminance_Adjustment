@@ -73,18 +73,6 @@ int mainsub_spbr_spbrascii ( int argc, char** argv )
         }
     }//for
 
-    // UCHIDA
-    // Adjust luminance
-    if ( spbr_engine->isLuminanceAdjustment() ) {
-        return mainsub_luminance_adjustment(   
-                /* kvs::glut::Application*  */  &app, 
-                /* int                      */  argc, 
-                /* char**                   */  argv, 
-                /* SPBR*                    */  spbr_engine, 
-                /* kvs::PointObject*        */  object, 
-                /* FILE_FORMAT              */  LuminanceAdjustment::SPBR_ASCII );
-    }
-
     // Set the total bounding box
     //   Note: This updates the total bounding box of the 
     //         read point objects.
@@ -100,6 +88,18 @@ int mainsub_spbr_spbrascii ( int argc, char** argv )
 #endif
 
     //===== END OF CREATING THE POINT OBJECT =====//
+
+    // UCHIDA
+    // Adjust luminance
+    if ( spbr_engine->isLuminanceAdjustment() ) {
+        return mainsub_luminance_adjustment(   
+                /* kvs::glut::Application*  */  &app, 
+                /* int                      */  argc, 
+                /* char**                   */  argv, 
+                /* SPBR*                    */  spbr_engine, 
+                /* kvs::PointObject*        */  object, 
+                /* FILE_FORMAT              */  LuminanceAdjustment::SPBR_ASCII );
+    }
 
 #if KVS_VERSION_MAJOR == 1
     kvs::glew::rits::ParticleBasedRenderer* renderer

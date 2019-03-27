@@ -75,7 +75,7 @@ public:
         char m_filename_tmp[256];
         m_sif->GetNameBody( m_filename_tmp );
         m_filename = m_filename_tmp;
-    }
+    } // End constroctor
 
     void update( kvs::TimeEvent* event ) {
         if ( m_la->getSnapshotCounter() < m_num_of_snapshots ) {
@@ -85,18 +85,17 @@ public:
                 m_repeat_level = 1;
                 std::cout << "** Forcibly, repeat level is set to \"1\".\n" << std::endl;
                 m_la->ReplaceObject( m_scene, m_argc, m_argv, m_spbr_engine, m_repeat_level);
+                std::cout << "\n** Replaced object and renderer." << std::endl;
 
             } else if ( m_la->getSnapshotCounter() == 2 ) {
-                std::cout << "\nSnapshot succeeded." << std::endl;
-                std::cout << "SPBR ended successfully." << std::endl;
-                std::cout << "================================" << std::endl;
-            }
+                std::cout << "** Snapshot succeeded."       << std::endl;
+                std::cout << "** SPBR ended successfully."  << std::endl;
+            } // end if
 
         } else {
-            std::cout << "\nAdjusting luminance of the image..." << std::endl;
-            m_la->adjustLuminance();
+            m_la->adjustLuminance( m_filename );
             exit(0);
-        }
+        } // end if
     } // End update()
 }; // End TimerEvent class
 

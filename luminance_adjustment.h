@@ -34,16 +34,17 @@ public:
     );
 
     // Functions to control Object and Renderer
-    static void RegisterObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
-    static kvs::PointObject* CreateObject(int argc, char** argv);
-    static kvs::glsl::ParticleBasedRenderer* CreateRenderer( SPBR* spbr_engine, const size_t LR);
+    void        RegisterObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
+    kvs::PointObject* CreateObject(int argc, char** argv);
+    kvs::glsl::ParticleBasedRenderer* CreateRenderer( SPBR* spbr_engine, const size_t LR);
     void        SetObject( SPBR* spbr_engine, kvs::PointObject* object );
     void        ReplaceObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR );
     void        SnapshotImage( kvs::Scene* scene, const std::string filename, const int repeat_level );
     size_t      getSnapshotCounter() const { return m_snapshot_counter; };
 
     // Functions to adjust luminance of the image
-    void        adjustLuminance();
+    void        adjustLuminance( const std::string filename );
+    void        displayMessage();
     void        setBackgroundColor( kvs::RGBColor bgcolor ) { m_bgcolor = bgcolor; };
     int         calcNumOfPixelsNonBGColor( const kvs::ColorImage& image );
     kvs::UInt8  calcMaxPixelValue( const kvs::GrayImage& image );

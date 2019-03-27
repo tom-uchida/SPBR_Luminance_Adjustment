@@ -26,42 +26,42 @@
 #include "file_format.h"
 #include "spbr.h"
 #include "mainfn_utility.h"
+#include "shuffle.h"
 
 #include "luminance_adjustment.h"
 #include <kvs/ColorImage>
 #include <kvs/GrayImage>
 
+#include "version.h"
+#include <sstream>
+#include <iomanip>
+
 LuminanceAdjustment::LuminanceAdjustment()
 {
     // Message
-    std::cout << "\n\n===== Luminance Adjustment ====="             << std::endl;
-    std::cout << "        Tomomasa Uchida"                          << std::endl;
-    std::cout << "          2019/03/16"                             << std::endl;
-    std::cout << "\n** LuminanceAdjustment constructor is called."  << std::endl;
+    std::cout << "\n\n** LuminanceAdjustment constructor is called.\n"  << std::endl;
 } // End constructor
 
 LuminanceAdjustment::LuminanceAdjustment(FILE_FORMAT file_format):
     m_file_format(file_format)
 {
     // Message
-    std::cout << "\n\n===== Luminance Adjustment ====="             << std::endl;
-    std::cout << "        Tomomasa Uchida"                          << std::endl;
-    std::cout << "          2019/03/23"                             << std::endl;
-    std::cout << "\n** LuminanceAdjustment constructor is called."  << std::endl;
+    std::cout << "\n\n** LuminanceAdjustment constructor is called."  << std::endl;
 
-    // if ( m_file_format == SPBR_ASCII )
-    //     std::cout << "** FILE_FORMAT : SPBR_ASCII"  << std::endl;
-    // else if ( m_file_format == SPBR_BINARY )
-    //     std::cout << "** FILE_FORMAT : SPBR_BINARY" << std::endl;
-    // else if ( m_file_format == PLY_ASCII )
-    //     std::cout << "** FILE_FORMAT : PLY_ASCII"   << std::endl;
-    // else if ( m_file_format == PLY_BINARY )
-    //     std::cout << "** FILE_FORMAT : PLY_BINARY"  << std::endl;
+    if ( m_file_format == SPBR_ASCII )
+        std::cout << "**  FILE_FORMAT : SPBR_ASCII"  << "\n" << std::endl;
+    else if ( m_file_format == SPBR_BINARY )
+        std::cout << "**  FILE_FORMAT : SPBR_BINARY" << "\n" << std::endl;
+    else if ( m_file_format == PLY_ASCII )
+        std::cout << "**  FILE_FORMAT : PLY_ASCII"   << "\n" << std::endl;
+    else if ( m_file_format == PLY_BINARY )
+        std::cout << "**  FILE_FORMAT : PLY_BINARY"  << "\n" << std::endl;
 } // End constructor
 
 void LuminanceAdjustment::RegisterObject( kvs::Scene* scene, int argc, char** argv, SPBR* spbr_engine, const size_t LR )
 {
-    scene->registerObject( LuminanceAdjustment::CreateObject(argc, argv), LuminanceAdjustment::CreateRenderer(spbr_engine, LR) );
+    // scene->registerObject( LuminanceAdjustment::CreateObject(argc, argv), LuminanceAdjustment::CreateRenderer(spbr_engine, LR) );
+    scene->registerObject( CreateObject(argc, argv), CreateRenderer(spbr_engine, LR) );
 } // End RegisterObject
 
 kvs::PointObject* LuminanceAdjustment::CreateObject(int argc, char** argv) {
@@ -89,6 +89,13 @@ kvs::PointObject* LuminanceAdjustment::CreateObject(int argc, char** argv) {
             object->add(*kvs::PointObject::DownCast(spbr_tmp));
         }
     } // end for
+
+    addBoundingBoxToScene( spbr_engine );
+
+    // Forced shuffle
+    if ( spbr_engine->isForcedShuffleOn() ) {
+        Shuffle shuffle_engine( spbr_engine );
+    }
 
     // Set name
     object->setName("Object");
@@ -153,7 +160,6 @@ void LuminanceAdjustment::ReplaceObject( kvs::Scene* scene, int argc, char** arg
 {
     scene->replaceObject( "Object", CreateObject(argc, argv) );
     scene->replaceRenderer( "Renderer", CreateRenderer(spbr_engine, LR) );
-    std::cout << "** Replaced object and renderer." << std::endl;
 } // End ReplaceObject()
 
 void LuminanceAdjustment::SnapshotImage( kvs::Scene* scene, const std::string filename, const int repeat_level )
@@ -167,14 +173,21 @@ void LuminanceAdjustment::SnapshotImage( kvs::Scene* scene, const std::string fi
     if ( m_snapshot_counter == 1 ) m_img_Color_LR1   = color_image_tmp;
 
     // Write color image
-    color_image_tmp.write( filename + "_LR" + kvs::String::ToString(repeat_level) + ".bmp" );
+    // color_image_tmp.write( filename + "_LR" + kvs::String::ToString(repeat_level) + ".bmp" ); // kvs2.7
+    std::ostringstream oss;
+    oss << repeat_level;
+    color_image_tmp.write( filename + "_LR" + oss.str() + ".bmp" );
     std::cout << "** Snapshot repeat level \"" << repeat_level << "\" image (BMP)" << std::endl;
 
     m_snapshot_counter++;
 } // End snapshotTwoImages()
 
-void LuminanceAdjustment::adjustLuminance()
+void LuminanceAdjustment::adjustLuminance( const std::string filename )
 {
+    // Display opening message
+    displayMessage();
+
+    // Calc number of pixels of the image
     size_t N_all = m_img_Color.numberOfPixels();
     size_t N_all_non_bgcolor = calcNumOfPixelsNonBGColor( m_img_Color );
     std::cout << "** Num. of pixels               : " << N_all             << " (pixels)" << std::endl;
@@ -202,11 +215,32 @@ void LuminanceAdjustment::adjustLuminance()
     // ==========================
     float p = calcAdjustmentParameter( m_img_Color, reference_pixel_value_LR1, N_all_non_bgcolor );
     doLuminanceAdjustment( m_img_Color, p );
-    std::cout << "** Adjustment parameter         : " << p << "\n" << std::endl;
+    std::cout << "** Adjustment parameter         : " << p << std::endl;
 
     // Write adjusted image
-    m_img_Color.write( "SPBR_DATA/haiden/adjusted.bmp" );
+    std::ostringstream oss;
+    oss << p;
+    std::string adjusted_filename(filename + "_adjusted" + oss.str() + ".bmp");
+    m_img_Color.write( adjusted_filename );
+    std::cout << "** Saved adjusted image."                 << std::endl;
+    std::cout << "   (PATH : " << adjusted_filename << ")"  << std::endl;
+    std::cout << "================================\n"       << std::endl;
+    
+    // Exec. open command
+    std::string EXEC("open ");
+    EXEC += adjusted_filename;
+    system( EXEC.c_str() );
+
 } // End adjustLuminance()
+
+inline void LuminanceAdjustment::displayMessage()
+{
+    std::cout << "\n" << std::endl;
+    std::cout << LA_TITLE                   << std::endl;
+    std::cout << "          " << LA_VERSION << std::endl;
+    std::cout << "           " << LA_DATE   << std::endl;
+    std::cout << "        " << LA_AUTHOR    << "\n" << std::endl;
+} // End displayMessage()
 
 inline int LuminanceAdjustment::calcNumOfPixelsNonBGColor( const kvs::ColorImage& color_image )
 {
@@ -267,6 +301,7 @@ float LuminanceAdjustment::calcAdjustmentParameter( const kvs::ColorImage& color
     float adjustment_parameter = 1.0;
     float tmp_ratio_of_reference_section = 0.0;
     
+    std::cout << std::endl;
     while ( tmp_ratio_of_reference_section < m_ratio_of_reference_section ) {
         // Update adjustment parameter
         adjustment_parameter += 0.1;
@@ -277,6 +312,7 @@ float LuminanceAdjustment::calcAdjustmentParameter( const kvs::ColorImage& color
             /* const kvs::UInt8 */ reference_pixel_value_LR1, 
             /* const size_t     */ N_all_non_bgcolor );
     } // end while
+    std::cout << std::endl;
 
     return adjustment_parameter -= 0.1;
 } // End doLuminanceAdjustment()
@@ -296,7 +332,8 @@ inline float LuminanceAdjustment::tempolarilyAdjustLuminance( const kvs::ColorIm
                 counter++;
 
     float tmp_ratio = float(counter) / float(N_all_non_bgcolor);
-    std::cout << "**  ( parameter, ratio )        : (" << p << ", " << tmp_ratio << ")" << std::endl;
+    std::cout   << "           ( parameter, ratio ) : ( " 
+                << p << ", " << std::setprecision(2) << 100*tmp_ratio << "(%) )" << std::endl;
 
     return tmp_ratio;
 } // End 

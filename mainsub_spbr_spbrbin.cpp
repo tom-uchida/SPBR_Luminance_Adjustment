@@ -74,18 +74,6 @@ int mainsub_spbr_spbrbin ( int argc, char** argv )
 
     }//for 
 
-    // UCHIDA
-    // Adjust luminance
-    if ( spbr_engine->isLuminanceAdjustment() ) {
-        return mainsub_luminance_adjustment(
-                /* kvs::glut::Application*  */  &app, 
-                /* int                      */  argc, 
-                /* char**                   */  argv, 
-                /* SPBR*                    */  spbr_engine, 
-                /* kvs::PointObject*        */  object, 
-                /* FILE_FORMAT              */  LuminanceAdjustment::SPBR_BINARY );
-    }
-
     // Set the total bounding box
     //   Note: This updates the total bounding box of the 
     //         read point objects.
@@ -102,11 +90,23 @@ int mainsub_spbr_spbrbin ( int argc, char** argv )
 
     //===== END OF CREATING THE POINT OBJECT =====//
 
+    // UCHIDA
+    // Adjust luminance
+    if ( spbr_engine->isLuminanceAdjustment() ) {
+        return mainsub_luminance_adjustment(
+                /* kvs::glut::Application*  */  &app, 
+                /* int                      */  argc, 
+                /* char**                   */  argv, 
+                /* SPBR*                    */  spbr_engine, 
+                /* kvs::PointObject*        */  object, 
+                /* FILE_FORMAT              */  LuminanceAdjustment::SPBR_BINARY );
+    }
+
     #if KVS_VERSION_MAJOR == 1
     kvs::glew::rits::ParticleBasedRenderer* renderer = new kvs::glew::rits::ParticleBasedRenderer();//KVS1
     #elif KVS_VERSION_MAJOR == 2
     /***
-     kvs::glsl::rits::ParticleBasedRenderer* renderer = new kvs::glsl::rits::ParticleBasedRenderer();//KVS2
+    kvs::glsl::rits::ParticleBasedRenderer* renderer = new kvs::glsl::rits::ParticleBasedRenderer();//KVS2
     ***/
     kvs::glsl::ParticleBasedRenderer* renderer = new kvs::glsl::ParticleBasedRenderer();//KVS2
     #endif

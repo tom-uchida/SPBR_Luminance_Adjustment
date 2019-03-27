@@ -41,16 +41,16 @@ int mainsub_luminance_adjustment(
     LuminanceAdjustment::FILE_FORMAT    file_format)
 {
     // Instantiate class LuminanceAdjustment
-    LuminanceAdjustment* la = new LuminanceAdjustment(file_format); 
+    LuminanceAdjustment* la = new LuminanceAdjustment( file_format );
 
     // Set the total bounding box
     //   Note: This updates the total bounding box of the 
     //         read point objects.
-    addBoundingBoxToScene ( spbr_engine ) ;
+    // addBoundingBoxToScene( spbr_engine );
 
     // Forced shuffle
     if( spbr_engine->isForcedShuffleOn () ) {
-        Shuffle shuffle_engine ( spbr_engine );
+        Shuffle shuffle_engine( spbr_engine );
     }
 
     //===== END OF CREATING THE POINT OBJECT =====//

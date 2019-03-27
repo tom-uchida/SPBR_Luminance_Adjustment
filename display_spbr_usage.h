@@ -10,13 +10,13 @@
 //-----
 inline void displaySPBR_OpeningMessage ( std::ostream& out = std::cout )
 {
-  std::cout << std::endl;
-  std::cout << SPBR_APP_TITLE << std::endl;
-  std::cout << "               " << SOPBR_VERSION << std::endl;
-  std::cout << std::endl;
-  std::cout << "                " << DATE << std::endl;
-  std::cout << AUTHOR << std::endl;
-  std::cout << INSTITUTE << "\n" << std::endl;
+    std::cout << std::endl;
+    std::cout << SPBR_APP_TITLE << std::endl;
+    std::cout << "               " << SOPBR_VERSION << std::endl;
+    std::cout << std::endl;
+    std::cout << "                " << DATE << std::endl;
+    std::cout << AUTHOR << std::endl;
+    std::cout << INSTITUTE << "\n" << std::endl;
 }
 
 //-----
@@ -59,6 +59,7 @@ inline void displaySPBRCommands ( std::ostream& out )
     out << "  #/LambertShading [kd ka] (default: 0.6 0.4)"  << std::endl;
     out << "  #/LOD 1 or 0 (on/off of LOD (default: 1))" << std::endl;
     out << "  #/LookAt (float x) (float y) (float z)  (default: (0,0,0))" << std::endl;
+    out << "  #/LuminanceAdjustment 1 or 0 (default: 0)" << std::endl; // UCHIDA 2019/3
     out << "  #/NumParticles  num" << std::endl;
     out << "     * This command makes sense if #/EndHeader command is used together" << std::endl;
     out << "  #/ObjectZXRotation zrot_angle_deg xrot_angle_deg " << std::endl;

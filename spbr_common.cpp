@@ -4,7 +4,7 @@
 
 #include "spbr.h"
 
-// UCHIDA
+// UCHIDA 2019/3
 //-----
 void
 SPBR::setFlagLuminanceAdjustment(int flag) {

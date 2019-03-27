@@ -137,19 +137,19 @@ SPBR::readHeader_and_countParticles ( void )
     if( buf[0] == '#' ) {
 
       // Command
-      if(buf[1] == '/') { 
-	//===== Commands skipped when reading the header part =====// //TANAKA
+        if(buf[1] == '/') { 
+	    //===== Commands skipped when reading the header part =====// //TANAKA
         //----- SPBR_ASCII_DATA -----
         if ( !strncmp( buf, SPBR_ASCII_DATA_COMMAND, strlen(SPBR_ASCII_DATA_COMMAND) ) ) { 
-          // Do nothing (ignored)
-	        std::cout << "** SPBR ASCII header is detected." << std::endl;
+            // Do nothing (ignored)
+            std::cout << "** SPBR ASCII header is detected." << std::endl;
         } else
-        // UCHIDA
+        // UCHIDA 2019/3
         //----- Luminance Adjustment ----- 
         if ( !strncmp( buf, LUMINANCE_ADJUSTMENT, strlen(LUMINANCE_ADJUSTMENT) ) ) { 
-          int flag;
-          sscanf ( buf, "%s %d", dummy, &flag );
-          setFlagLuminanceAdjustment( flag );
+            int flag;
+            sscanf ( buf, "%s %d", dummy, &flag );
+            setFlagLuminanceAdjustment( flag );
         } else
         //----- ColorRGBByte (renamed from ColorByteRGB) -----
         // NOTE: The ColorRGBByte block must be written before the ColorRGB block

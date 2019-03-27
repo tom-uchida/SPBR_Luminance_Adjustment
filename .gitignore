@@ -3,6 +3,7 @@ SPBR_DATA/
 PLY_DATA/
 LA_PYTHON/
 
+*.vscode
 *.o
 *.cc
 *.txt
