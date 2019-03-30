@@ -34,7 +34,6 @@
 
 #include "version.h"
 #include <sstream>
-#include <iomanip>
 
 LuminanceAdjustment::LuminanceAdjustment():
     m_snapshot_counter( 0 ),
@@ -232,7 +231,7 @@ void LuminanceAdjustment::adjustLuminance( const std::string filename )
     float p = calcAdjustmentParameter( m_img_Color, reference_pixel_value_LR1, N_all_non_bgcolor );
     p = specifyNumOfDigits( p, 4 );
     doLuminanceAdjustment( m_img_Color, p );
-    std::cout << "** Adjustment parameter              : " << std::setprecision(3) << p << std::endl;
+    std::cout << "** Adjustment parameter              : " << p << std::endl;
 
     // Write adjusted image
     std::ostringstream oss;
