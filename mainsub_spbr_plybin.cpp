@@ -38,7 +38,7 @@ int mainsub_luminance_adjustment(
     char**                              argv,
     SPBR*                               spbr_engine,
     kvs::PointObject*                   object,
-    LuminanceAdjustment::FILE_FORMAT    file_format);
+    LuminanceAdjustment::FILE_FORMAT4LA file_format );
 
 //#define DEBUG_MAIN
 
@@ -99,8 +99,8 @@ int mainsub_spbr_plybin ( int argc, char** argv )
                 /* int                      */  argc, 
                 /* char**                   */  argv, 
                 /* SPBR*                    */  spbr_engine, 
-                /* kvs::PointObject*        */  object, 
-                /* FILE_FORMAT              */  LuminanceAdjustment::PLY_BINARY );
+                /* kvs::PointObject*        */  object,
+                /* FILE_FORMAT4LA           */  LuminanceAdjustment::PLY_BINARY4LA );
     }
 
     #if KVS_VERSION_MAJOR == 1

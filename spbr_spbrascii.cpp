@@ -144,7 +144,7 @@ SPBR::readHeader_and_countParticles ( void )
             // Do nothing (ignored)
             std::cout << "** SPBR ASCII header is detected." << std::endl;
         } else
-        // UCHIDA 2019/3
+        // UCHIDA 2019/3/30
         //----- Luminance Adjustment ----- 
         if ( !strncmp( buf, LUMINANCE_ADJUSTMENT, strlen(LUMINANCE_ADJUSTMENT) ) ) { 
             int flag;

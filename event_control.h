@@ -46,7 +46,7 @@ const kvs::Vector3f DEFAULT_LIGHT_POSITION (12.0, 12.0, 12.0) ;
 class TimerEvent : public kvs::TimerEventListener {
 //------------------------------------------------------------//
 private:
-    const int 			 m_num_of_snapshots = 2; // LR="original" & LR="1"
+    const int 			 m_num_of_snapshots; // LR="original" & LR="1"
     int     			 m_argc;
     char**  			 m_argv;
     size_t  			 m_repeat_level;
@@ -63,6 +63,7 @@ public:
                 kvs::Scene* 			scene,
                 SPBR* 					spbr_engine,
                 const int 				original_repeat_level ) : 
+        m_num_of_snapshots( 2 ),
         m_argc( argc ),
         m_argv( argv ),
         m_repeat_level( original_repeat_level ),
@@ -529,7 +530,7 @@ public:
         std::cerr << "  y-key:Y Rotation, Y-key: -Y Rotation" << std::endl;
         std::cerr << "  z-key:Z Rotation, Z-key: -Z Rotation" << std::endl;
         std::cerr << "  UP-key: Y Move, DOWN-key: -Y Move" << std::endl;///
-        std::cerr << " RIGHT-key: -X Move, LIGHT-key: X Move" << std::endl;///
+        std::cerr << "LEFT-key: -X Move, RIGHT-key: X Move" << std::endl;///
         std::cerr << "  u-key: Z Move, d-key: -Z Move" << std::endl;///
         std::cerr << "  s-key: snapshot image (BMP)" << std::endl;
         std::cerr << "  S-key: snapshot image (PPM)" << std::endl;

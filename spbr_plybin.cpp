@@ -317,6 +317,13 @@ SPBR::read_SPBR_ParameterFile_Binary( const char* filename )
 	
       // Command
       if(buf[1] == '/') { 
+        // UCHIDA 2019/3/30
+        //----- Luminance Adjustment ----- 
+        if ( !strncmp( buf, LUMINANCE_ADJUSTMENT, strlen(LUMINANCE_ADJUSTMENT) ) ) { 
+            int flag;
+            sscanf ( buf, "%s %d", dummy, &flag );
+            setFlagLuminanceAdjustment( flag );
+        } else
         //----- Origin ----- [OK]
         if ( !strncmp( buf, ORIGIN_COMMAND, strlen(ORIGIN_COMMAND) ) ) { 
           double Ox, Oy, Oz ;

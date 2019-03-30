@@ -38,22 +38,10 @@ int mainsub_luminance_adjustment(
     char**                              argv,
     SPBR*                               spbr_engine,
     kvs::PointObject*                   object,
-    LuminanceAdjustment::FILE_FORMAT    file_format)
+    LuminanceAdjustment::FILE_FORMAT4LA file_format )
 {
     // Instantiate class LuminanceAdjustment
     LuminanceAdjustment* la = new LuminanceAdjustment( file_format );
-
-    // Set the total bounding box
-    //   Note: This updates the total bounding box of the 
-    //         read point objects.
-    // addBoundingBoxToScene( spbr_engine );
-
-    // Forced shuffle
-    if( spbr_engine->isForcedShuffleOn () ) {
-        Shuffle shuffle_engine( spbr_engine );
-    }
-
-    //===== END OF CREATING THE POINT OBJECT =====//
 
     // Create screen
     kvs::glut::Screen screen( app );
